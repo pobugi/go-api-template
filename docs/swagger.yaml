@@ -1,0 +1,210 @@
+basePath: /
+definitions:
+  books.BookResponse:
+    properties:
+      author:
+        type: string
+      id:
+        type: integer
+      name:
+        type: string
+      publication:
+        type: string
+    type: object
+  books.CreateBookRequest:
+    properties:
+      author:
+        maxLength: 255
+        minLength: 1
+        type: string
+      name:
+        maxLength: 255
+        minLength: 1
+        type: string
+      publication:
+        maxLength: 255
+        minLength: 1
+        type: string
+    required:
+    - author
+    - name
+    - publication
+    type: object
+  books.UpdateBookRequest:
+    properties:
+      author:
+        maxLength: 255
+        minLength: 1
+        type: string
+      name:
+        maxLength: 255
+        minLength: 1
+        type: string
+      publication:
+        maxLength: 255
+        minLength: 1
+        type: string
+    type: object
+  httpx.Envelope:
+    properties:
+      data: {}
+      error:
+        $ref: '#/definitions/httpx.ErrorPayload'
+      success:
+        type: boolean
+    type: object
+  httpx.ErrorPayload:
+    properties:
+      code:
+        type: string
+      message:
+        type: string
+    type: object
+info:
+  contact: {}
+  description: Clean CRUD demo with Gorilla Mux, GORM, MySQL.
+  title: Bookstore API
+  version: "1.0"
+paths:
+  /v1/books:
+    get:
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            allOf:
+            - $ref: '#/definitions/httpx.Envelope'
+            - properties:
+                data:
+                  items:
+                    $ref: '#/definitions/books.BookResponse'
+                  type: array
+              type: object
+      summary: List books
+      tags:
+      - books
+    post:
+      consumes:
+      - application/json
+      description: Create a new book
+      parameters:
+      - description: book
+        in: body
+        name: payload
+        required: true
+        schema:
+          $ref: '#/definitions/books.CreateBookRequest'
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: Created
+          schema:
+            allOf:
+            - $ref: '#/definitions/httpx.Envelope'
+            - properties:
+                data:
+                  $ref: '#/definitions/books.BookResponse'
+              type: object
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/httpx.Envelope'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/httpx.Envelope'
+      summary: Create book
+      tags:
+      - books
+  /v1/books/{id}:
+    delete:
+      parameters:
+      - description: id
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "204":
+          description: No Content
+          schema:
+            $ref: '#/definitions/httpx.Envelope'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/httpx.Envelope'
+      summary: Delete book
+      tags:
+      - books
+    get:
+      parameters:
+      - description: id
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            allOf:
+            - $ref: '#/definitions/httpx.Envelope'
+            - properties:
+                data:
+                  $ref: '#/definitions/books.BookResponse'
+              type: object
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/httpx.Envelope'
+      summary: Get book by id
+      tags:
+      - books
+    put:
+      consumes:
+      - application/json
+      parameters:
+      - description: id
+        in: path
+        name: id
+        required: true
+        type: integer
+      - description: payload
+        in: body
+        name: payload
+        required: true
+        schema:
+          $ref: '#/definitions/books.UpdateBookRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            allOf:
+            - $ref: '#/definitions/httpx.Envelope'
+            - properties:
+                data:
+                  $ref: '#/definitions/books.BookResponse'
+              type: object
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/httpx.Envelope'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/httpx.Envelope'
+      summary: Update book
+      tags:
+      - books
+schemes:
+- http
+swagger: "2.0"

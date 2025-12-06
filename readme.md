@@ -1,5 +1,12 @@
-go mod init github.com/pobugi/go-crud-mysql
+# Go API Template
 
-* go get "github.com/jinzhu/gorm"
-* go get "github.com/jinzhu/gorm/dialects/mysql"
-* go get "github.com/gorilla/mux"
+Go REST API template.
+
+It shows how to structure a Go service with:
+
+- `cmd/` entrypoint
+- `pkg/` with app/router, config, DB, domain packages
+- **GORM + MySQL**
+- **Gorilla Mux** + middlewares
+- **Viper**-based configuration with `.env`
+- **Swagger/OpenAPI** documentation
